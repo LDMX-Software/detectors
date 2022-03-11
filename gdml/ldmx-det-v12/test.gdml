@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <!-- world dimensions -->
+        <constant name="world_dim" value="100.0*cm"/>
+
+        <!-- Target dimensions -->
+        <constant name="target_dim_x" value="10.0*cm"/>
+        <constant name="target_dim_y" value="10.0*cm"/>
+        <!-- Target thickness (.05X0 of C) -->
+        <constant name="target_dim_z" value="0.02*mm"/>
+
+        <!-- Positions -->
+        <position name="target_pos" x="0.0" y="0.0" z="2*m" />
+
+    </define>
+
+    <materials>
+        <material name="W" Z="74.0">
+            <D value="19.28" />
+            <atom value="183.84" />
+        </material>
+
+        <element Z="1" formula="H" name="H">
+            <atom type="A" unit="g/mol" value="1.00794" />
+        </element>
+        <material name="Vacuum">
+            <D type="density" unit="g/cm3" value="0.00000001" />
+            <fraction n="1" ref="H" />
+        </material>
+    </materials>
+
+    <solids>
+        <box name="world_box" x="world_dim" y="world_dim" z="world_dim"/>
+        <box name="target_box" x="target_dim_x" y="target_dim_y" z="target_dim_z"/>
+    </solids>
+
+    <structure>
+        <volume name="target">
+            <materialref ref="W" />
+            <solidref ref="target_box"/>
+        </volume>
+        <volume name="World">
+            <materialref ref="Vacuum"/>
+            <solidref ref="world_box"/>
+            <physvol>
+                <volumeref ref="target"/>
+                <positionref ref="target_pos"/>
+            </physvol>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="World"/>
+    </setup>
+
+
+</gdml>
